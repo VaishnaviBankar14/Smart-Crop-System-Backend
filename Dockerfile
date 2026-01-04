@@ -1,20 +1,33 @@
-# Use Java 17
-FROM eclipse-temurin:17-jdk
+# ---------- BUILD STAGE ----------
+FROM eclipse-temurin:17-jdk AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy everything
-COPY . .
+# Copy only required files first
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
 
-# 🔴 IMPORTANT FIX: give execute permission to mvnw
+# Fix permission + line endings
 RUN chmod +x mvnw
 
-# Build the project
+# Download dependencies
+RUN ./mvnw dependency:go-offline
+
+# Copy source code
+COPY src src
+
+# Build jar
 RUN ./mvnw clean package -DskipTests
 
-# Expose port
+
+# ---------- RUN STAGE ----------
+FROM eclipse-temurin:17-jre
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the app
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "app.jar"]
