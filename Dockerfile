@@ -3,18 +3,18 @@ FROM eclipse-temurin:17-jdk AS build
 
 WORKDIR /app
 
-# Copy only required files first
+# Copy Maven wrapper & config
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 
-# Fix permission + line endings
-RUN chmod +x mvnw
+# Fix permissions + Windows line endings
+RUN chmod +x mvnw && sed -i 's/\r$//' mvnw
 
 # Download dependencies
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -B dependency:resolve
 
-# Copy source code
+# Copy source
 COPY src src
 
 # Build jar
@@ -26,6 +26,7 @@ FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
+# Copy built jar
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
