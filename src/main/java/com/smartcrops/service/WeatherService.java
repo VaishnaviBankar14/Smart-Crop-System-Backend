@@ -3,6 +3,7 @@ package com.smartcrops.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,7 +14,10 @@ public class WeatherService {
     @Value("${weather.api.key}")
     private String apiKey;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    // ❌ private final RestTemplate restTemplate = new RestTemplate();
+    // ✅ Use timeout-enabled RestTemplate
+    @Autowired
+    private RestTemplate restTemplate;
 
     // 🌦 Fetch raw weather data by city
     public Map<String, Object> getWeatherByCity(String city) {
@@ -62,18 +66,12 @@ public class WeatherService {
     // 🌱 Detect season (Indian context)
     public String detectSeason(double temp, double rainfall) {
 
-        if (temp >= 22) {
-            return "Kharif";
-        }
-
-        if (temp < 22 && temp >= 10) {
-            return "Rabi";
-        }
-
+        if (temp >= 22) return "Kharif";
+        if (temp < 22 && temp >= 10) return "Rabi";
         return "Zaid";
     }
 
-    // 🌦 7-Day Forecast (avg temp & rainfall)
+    // 🌦 7-Day Forecast (UNCHANGED – optional usage)
     public double[] get7DayWeatherAverages(double lat, double lon) {
 
         String url =
@@ -110,9 +108,6 @@ public class WeatherService {
             count++;
         }
 
-        double avgTemp = totalTemp / count;
-        double avgRain = totalRain;
-
-        return new double[]{avgTemp, avgRain};
+        return new double[]{ totalTemp / count, totalRain };
     }
 }
