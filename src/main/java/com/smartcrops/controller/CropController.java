@@ -35,7 +35,7 @@ public class CropController {
     private CropRepository cropRepository;
 
     // ===============================
-    // ⭐ HELPER: SELECT ONE BEST CROP
+    // ⭐ HELPER: SELECT ONE BEST CROP (PERMANENT FIX)
     // ===============================
     private Crop selectBestCrop(
             List<Crop> crops,
@@ -47,14 +47,21 @@ public class CropController {
 
         for (Crop c : crops) {
 
-            if (soilPh < c.getMinPh() || soilPh > c.getMaxPh()) continue;
-            if (rainfall < c.getMinRainfall() || rainfall > c.getMaxRainfall()) continue;
+            // ❌ rainfall completely impossible असेल तर skip
+            if (rainfall < c.getMinRainfall() - 50 ||
+                rainfall > c.getMaxRainfall() + 50) {
+                continue;
+            }
 
+            // ✅ pH score (exact किंवा closest)
             double phMid = (c.getMinPh() + c.getMaxPh()) / 2;
-            double rainMid = (c.getMinRainfall() + c.getMaxRainfall()) / 2;
-
             double phScore = 1 / (1 + Math.abs(soilPh - phMid));
+
+            // ✅ rainfall score
+            double rainMid = (c.getMinRainfall() + c.getMaxRainfall()) / 2;
             double rainScore = 1 / (1 + Math.abs(rainfall - rainMid));
+
+            // ✅ yield importance (unchanged)
             double yieldScore = c.getYieldPerAcre() / 100;
 
             double totalScore = phScore + rainScore + yieldScore;
@@ -84,7 +91,7 @@ public class CropController {
     }
 
     // ===============================
-    // 3️⃣ MANUAL RECOMMENDATION
+    // 3️⃣ MANUAL RECOMMENDATION (UNCHANGED)
     // ===============================
     @GetMapping("/recommend")
     public List<Crop> recommendCrop(
@@ -102,7 +109,7 @@ public class CropController {
     }
 
     // ===============================
-    // 4️⃣ YIELD PREDICTION
+    // 4️⃣ YIELD PREDICTION (UNCHANGED)
     // ===============================
     @GetMapping("/predict-yield")
     public double predictYield(
@@ -113,9 +120,14 @@ public class CropController {
         Crop crop = cropRepository.findById(cropId)
                 .orElseThrow(() -> new RuntimeException("Crop not found"));
 
-        double phFactor = (soilPh >= crop.getMinPh() && soilPh <= crop.getMaxPh()) ? 1.0 : 0.7;
-        double rainFactor = (rainfall >= crop.getMinRainfall()
-                          && rainfall <= crop.getMaxRainfall()) ? 1.0 : 0.8;
+        double phFactor =
+                (soilPh >= crop.getMinPh() && soilPh <= crop.getMaxPh())
+                        ? 1.0 : 0.7;
+
+        double rainFactor =
+                (rainfall >= crop.getMinRainfall()
+                 && rainfall <= crop.getMaxRainfall())
+                        ? 1.0 : 0.8;
 
         return crop.getYieldPerAcre() * phFactor * rainFactor;
     }
@@ -234,6 +246,7 @@ public class CropController {
         );
     }
 }
+
 
 
 //package com.smartcrops.controller;
