@@ -12,6 +12,7 @@ import com.smartcrops.jwt.JwtUtil;
 import com.smartcrops.model.User;
 import com.smartcrops.repository.UserRepository;
 import com.smartcrops.service.PasswordResetUtil;
+import com.smartcrops.service.EmailService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,7 +24,10 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // ---------- REGISTER API ----------
+    @Autowired
+    private EmailService emailService;
+
+    // ---------- REGISTER ----------
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
 
@@ -31,16 +35,14 @@ public class UserController {
             return ResponseEntity.badRequest().body("Email already registered");
         }
 
-        // 🔐 ENCRYPT PASSWORD
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
 
         userRepository.save(user);
-
         return ResponseEntity.ok("User registered successfully");
     }
 
-    // ---------- LOGIN API ----------
+    // ---------- LOGIN ----------
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginData) {
 
@@ -56,18 +58,18 @@ public class UserController {
             return ResponseEntity.badRequest().body("Invalid email or password");
         }
 
-        // 🔐 GENERATE JWT TOKEN
         String token = JwtUtil.generateToken(
                 user.getEmail(),
                 user.getRole()
         );
 
-
-
         return ResponseEntity.ok(token);
     }
+
+    // ---------- FORGOT PASSWORD (EMAIL) ----------
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Email not registered"));
 
@@ -77,12 +79,16 @@ public class UserController {
         user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15));
         userRepository.save(user);
 
-        System.out.println(
-          "RESET LINK: http://localhost:3000/reset-password?token=" + token
-        );
+        // ✅ FRONTEND URL (CHANGE AFTER DEPLOY)
+        String resetLink =
+            "https://your-frontend-url/reset-password?token=" + token;
 
-        return ResponseEntity.ok("Reset link sent");
+        emailService.sendResetLink(email, resetLink);
+
+        return ResponseEntity.ok("Reset link sent to your email");
     }
+
+    // ---------- RESET PASSWORD ----------
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(
             @RequestParam String token,
@@ -102,6 +108,4 @@ public class UserController {
 
         return ResponseEntity.ok("Password reset successful");
     }
-
-
 }
