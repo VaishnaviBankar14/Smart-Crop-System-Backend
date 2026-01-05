@@ -1,27 +1,46 @@
 package com.smartcrops.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import com.sendgrid.*;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${SENDGRID_API_KEY}")
+    private String sendGridApiKey;
 
     public void sendResetLink(String toEmail, String resetLink) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Reset Password - Smart Crop System");
-        message.setText(
-            "Click the link below to reset your password:\n\n" +
-            resetLink +
+        Email from = new Email("smartcropsystem14@gmail.com"); // verified sender
+        String subject = "Reset Password - Smart Crop System";
+        Email to = new Email(toEmail);
+
+        Content content = new Content(
+            "text/plain",
+            "Click the link below to reset your password:\n\n"
+            + resetLink +
             "\n\nThis link is valid for 15 minutes."
         );
 
-        mailSender.send(message);
+        Mail mail = new Mail(from, subject, to, content);
+
+        SendGrid sg = new SendGrid(sendGridApiKey);
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            sg.api(request);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to send email via SendGrid", e);
+        }
     }
 }
