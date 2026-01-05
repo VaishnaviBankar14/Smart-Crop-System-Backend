@@ -1,0 +1,199 @@
+{
+  "rice": {
+    "description": "Rice is a major food crop grown widely in India.",
+    "season": "Kharif",
+    "soil": "Clayey or loamy soil",
+    "ph": "5.5 – 7.0",
+    "rainfall": "150 – 300 mm",
+    "tips": "Maintain standing water during early growth stages."
+  },
+
+  "wheat": {
+    "description": "Wheat is a staple Rabi crop grown in cool climates.",
+    "season": "Rabi",
+    "soil": "Well-drained loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "50 – 120 mm",
+    "tips": "Avoid waterlogging and irrigate at tillering stage."
+  },
+
+  "maize": {
+    "description": "Maize is used as food, fodder, and industrial crop.",
+    "season": "Kharif",
+    "soil": "Fertile loamy soil",
+    "ph": "5.5 – 7.0",
+    "rainfall": "60 – 110 mm",
+    "tips": "Ensure proper drainage and sunlight."
+  },
+
+  "cotton": {
+    "description": "Cotton is a major fiber crop.",
+    "season": "Kharif",
+    "soil": "Black cotton soil",
+    "ph": "5.8 – 7.5",
+    "rainfall": "60 – 200 mm",
+    "tips": "Requires long frost-free period."
+  },
+
+  "sugarcane": {
+    "description": "Sugarcane is a long-duration commercial crop.",
+    "season": "Annual",
+    "soil": "Deep rich loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "150 – 250 mm",
+    "tips": "Needs frequent irrigation and warm climate."
+  },
+
+  "barley": {
+    "description": "Barley is used for food, fodder, and malting.",
+    "season": "Rabi",
+    "soil": "Loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "40 – 100 mm",
+    "tips": "Grows well in dry conditions."
+  },
+
+  "soybean": {
+    "description": "Soybean is an important oilseed crop.",
+    "season": "Kharif",
+    "soil": "Well-drained loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "60 – 150 mm",
+    "tips": "Avoid water stagnation."
+  },
+
+  "groundnut": {
+    "description": "Groundnut is an oilseed crop.",
+    "season": "Kharif",
+    "soil": "Sandy loam soil",
+    "ph": "5.5 – 7.0",
+    "rainfall": "50 – 125 mm",
+    "tips": "Light soil helps pod development."
+  },
+
+  "mustard": {
+    "description": "Mustard is a major oilseed crop.",
+    "season": "Rabi",
+    "soil": "Loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "30 – 90 mm",
+    "tips": "Avoid excessive irrigation."
+  },
+
+  "jowar": {
+    "description": "Jowar is a drought-resistant cereal crop.",
+    "season": "Kharif",
+    "soil": "Loamy soil",
+    "ph": "5.5 – 7.5",
+    "rainfall": "40 – 100 mm",
+    "tips": "Suitable for dry regions."
+  },
+
+  "bajra": {
+    "description": "Bajra is a hardy millet crop.",
+    "season": "Kharif",
+    "soil": "Sandy soil",
+    "ph": "5.5 – 7.5",
+    "rainfall": "40 – 80 mm",
+    "tips": "Highly drought tolerant."
+  },
+
+  "ragi": {
+    "description": "Ragi is a nutritious millet crop.",
+    "season": "Kharif",
+    "soil": "Red loamy soil",
+    "ph": "5.0 – 7.0",
+    "rainfall": "50 – 100 mm",
+    "tips": "Grows well in hilly areas."
+  },
+
+  "sunflower": {
+    "description": "Sunflower is an oilseed crop.",
+    "season": "Kharif",
+    "soil": "Well-drained loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "40 – 100 mm",
+    "tips": "Needs bright sunlight."
+  },
+
+  "chickpea": {
+    "description": "Chickpea is a major pulse crop.",
+    "season": "Rabi",
+    "soil": "Loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "40 – 100 mm",
+    "tips": "Sensitive to waterlogging."
+  },
+
+  "pigeon pea": {
+    "description": "Pigeon pea is a protein-rich pulse crop.",
+    "season": "Kharif",
+    "soil": "Loamy soil",
+    "ph": "5.5 – 7.0",
+    "rainfall": "60 – 150 mm",
+    "tips": "Needs warm climate."
+  },
+
+  "lentil": {
+    "description": "Lentil is a cool-season pulse crop.",
+    "season": "Rabi",
+    "soil": "Loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "30 – 90 mm",
+    "tips": "Requires less irrigation."
+  },
+
+  "tomato": {
+    "description": "Tomato is a widely grown vegetable crop.",
+    "season": "Zaid",
+    "soil": "Sandy loam soil",
+    "ph": "5.5 – 7.0",
+    "rainfall": "50 – 150 mm",
+    "tips": "Needs support and regular watering."
+  },
+
+  "onion": {
+    "description": "Onion is an important vegetable crop.",
+    "season": "Rabi",
+    "soil": "Well-drained loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "50 – 120 mm",
+    "tips": "Avoid excessive moisture."
+  },
+
+  "potato": {
+    "description": "Potato is a tuber crop grown in cool climate.",
+    "season": "Rabi",
+    "soil": "Sandy loam soil",
+    "ph": "5.5 – 6.5",
+    "rainfall": "50 – 120 mm",
+    "tips": "Needs proper earthing up."
+  },
+
+  "chilli": {
+    "description": "Chilli is a spice crop used worldwide.",
+    "season": "Kharif",
+    "soil": "Well-drained soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "60 – 150 mm",
+    "tips": "Sensitive to excess water."
+  },
+
+  "banana": {
+    "description": "Banana is a tropical fruit crop.",
+    "season": "Annual",
+    "soil": "Deep fertile loamy soil",
+    "ph": "6.0 – 7.5",
+    "rainfall": "120 – 250 mm",
+    "tips": "Requires regular irrigation."
+  },
+
+  "mango": {
+    "description": "Mango is a major fruit crop of India.",
+    "season": "Annual",
+    "soil": "Well-drained loamy soil",
+    "ph": "5.5 – 7.5",
+    "rainfall": "100 – 200 mm",
+    "tips": "Avoid water stagnation near roots."
+  }
+}
