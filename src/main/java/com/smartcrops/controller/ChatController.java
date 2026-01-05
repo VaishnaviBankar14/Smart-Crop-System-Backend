@@ -40,7 +40,7 @@ public class ChatController {
         // Extract email from JWT
         String email = JwtUtil.extractUsername(token);
 
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmailIgnoreCase(email).orElseThrow();
         Long userId = user.getId();
 
         String reply = chatService.getReply(
@@ -68,7 +68,7 @@ public class ChatController {
 
         String email = JwtUtil.extractUsername(token);
 
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmailIgnoreCase(email).orElseThrow();
         Long userId = user.getId();
 
         return chatRepository.findByUserId(userId);

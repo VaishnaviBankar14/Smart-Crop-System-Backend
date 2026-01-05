@@ -34,7 +34,7 @@ public class UserController {
         // ✅ normalize email (FIX)
         String email = user.getEmail().toLowerCase().trim();
 
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
             return ResponseEntity.badRequest().body("Email already registered");
         }
 
@@ -53,7 +53,7 @@ public class UserController {
         // ✅ normalize email (FIX)
         String email = loginData.getEmail().toLowerCase().trim();
 
-        Optional<User> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
 
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid email or password");
@@ -80,7 +80,7 @@ public class UserController {
         // ✅ normalize email (FIX)
         String normalizedEmail = email.toLowerCase().trim();
 
-        User user = userRepository.findByEmail(normalizedEmail)
+        User user = userRepository.findByEmailIgnoreCase(normalizedEmail)
                 .orElseThrow(() -> new RuntimeException("Email not registered"));
 
         String token = PasswordResetUtil.generateToken();
