@@ -31,10 +31,14 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
 
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        // ✅ normalize email (FIX)
+        String email = user.getEmail().toLowerCase().trim();
+
+        if (userRepository.findByEmail(email).isPresent()) {
             return ResponseEntity.badRequest().body("Email already registered");
         }
 
+        user.setEmail(email);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
 
@@ -46,7 +50,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginData) {
 
-        Optional<User> userOpt = userRepository.findByEmail(loginData.getEmail());
+        // ✅ normalize email (FIX)
+        String email = loginData.getEmail().toLowerCase().trim();
+
+        Optional<User> userOpt = userRepository.findByEmail(email);
 
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid email or password");
@@ -70,7 +77,10 @@ public class UserController {
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
 
-        User user = userRepository.findByEmail(email)
+        // ✅ normalize email (FIX)
+        String normalizedEmail = email.toLowerCase().trim();
+
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new RuntimeException("Email not registered"));
 
         String token = PasswordResetUtil.generateToken();
@@ -79,11 +89,11 @@ public class UserController {
         user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15));
         userRepository.save(user);
 
-        // ✅ FRONTEND URL (CHANGE AFTER DEPLOY)
+        // ✅ UPDATE THIS WITH NETLIFY URL
         String resetLink =
-            "https://your-frontend-url/reset-password?token=" + token;
+            "https://smart-crop-system.netlify.app/reset-password?token=" + token;
 
-        emailService.sendResetLink(email, resetLink);
+        emailService.sendResetLink(normalizedEmail, resetLink);
 
         return ResponseEntity.ok("Reset link sent to your email");
     }
