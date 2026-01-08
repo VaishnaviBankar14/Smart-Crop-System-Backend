@@ -43,13 +43,16 @@ public class CropController {
             double soilPh,
             double rainfall) {
 
+        if (crops == null || crops.isEmpty()) return null;
+
         Crop best = null;
         double bestScore = -1;
 
         for (Crop c : crops) {
 
-            if (rainfall < c.getMinRainfall() - 50 ||
-                rainfall > c.getMaxRainfall() + 50) {
+            // 🔧 relaxed guard (IMPORTANT FIX)
+            if (rainfall < c.getMinRainfall() - 100 ||
+                rainfall > c.getMaxRainfall() + 100) {
                 continue;
             }
 
@@ -111,7 +114,6 @@ public class CropController {
             @RequestParam String city,
             @RequestParam double soilPh) {
 
-        // ✅ pH LIMIT (0–9)
         if (soilPh < 0 || soilPh > 9) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
@@ -130,7 +132,16 @@ public class CropController {
 
         List<Crop> crops = cropRepository.findBySeason(season);
 
-        return selectBestCrop(crops, soilPh, rainfall);
+        Crop best = selectBestCrop(crops, soilPh, rainfall);
+
+        if (best == null) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "No suitable crop found"
+            );
+        }
+
+        return best;
     }
 
     // ===============================
@@ -148,7 +159,6 @@ public class CropController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // ✅ pH LIMIT (0–9)
         if (soilPh < 0 || soilPh > 9) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -168,7 +178,13 @@ public class CropController {
         List<Crop> crops = cropRepository.findBySeason(season);
 
         Crop best = selectBestCrop(crops, soilPh, rainfall);
-        if (best == null) return ResponseEntity.ok(null);
+
+        if (best == null) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "No suitable crop found"
+            );
+        }
 
         double rainFactor = 1.0;
         if (rainfall < best.getMinRainfall()) rainFactor = 0.7;
@@ -181,7 +197,9 @@ public class CropController {
         history.setCropName(best.getName());
         history.setSeason(best.getSeason());
         history.setExpectedYield(expectedYield);
-        historyRepository.save(history);
+
+        // 🔥 CRITICAL FIX: force DB write
+        historyRepository.saveAndFlush(history);
 
         return ResponseEntity.ok(
                 new com.smartcrops.dto.CropYieldResponse(
@@ -192,6 +210,7 @@ public class CropController {
         );
     }
 }
+
 
 
 //package com.smartcrops.controller;
