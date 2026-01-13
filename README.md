@@ -1,5 +1,5 @@
-🌾 Smart Crop System – Backend
-
+**🌾 Smart Crop System – Backend
+**
 A Spring Boot–based backend for the Smart Crop System, a data-driven agricultural decision support platform that provides crop recommendations, yield prediction, weather-aware insights, authentication, and farmer history tracking.
 
 🚀 Features
